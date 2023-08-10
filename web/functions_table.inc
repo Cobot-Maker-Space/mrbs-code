@@ -49,6 +49,16 @@ function prepare_entry(array $entry) : array
     }
   }
 
+  $rd = get_room_details($entry['room_id']);
+  if ($rd['area_id'] == 1) {
+
+  if ($entry['private']) {
+      $entry['name'] = $entry['name'] . " (Exclusive)";
+    } else {
+      $entry['name'] = $entry['name'] . " (Non-Exclusive)";
+    }
+  }
+
   // Check whether the event is private
   if (is_private_event($entry['private']) &&
       ($kiosk || !getWritable($entry['create_by'], $entry['room_id'])))
@@ -67,10 +77,6 @@ function prepare_entry(array $entry) : array
     {
       $entry['type'] = 'private_type';
     }
-  }
-  else
-  {
-    $entry['private'] = false;
   }
 
   return $entry;

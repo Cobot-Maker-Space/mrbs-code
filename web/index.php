@@ -4,6 +4,7 @@ namespace MRBS;
 use MRBS\Form\ElementInputSubmit;
 use MRBS\Form\ElementSelect;
 use MRBS\Form\Form;
+use MRBS\Form\ElementA;
 
 require "defaultincludes.inc";
 require_once "functions_table.inc";
@@ -50,36 +51,18 @@ function make_area_select_html(string $view, int $year, int $month, int $day, in
   {
     $page_date = format_iso_date($year, $month, $day);
 
-    $form = new Form();
-
-    $form->setAttributes(array('class'  => 'areaChangeForm',
-                               'method' => 'get',
-                               'action' => multisite(this_page())));
-
-    $form->addHiddenInputs(array('view'      => $view,
-                                 'page_date' => $page_date));
-
-    if ($multisite && isset($site) && ($site !== ''))
-    {
-      $form->addHiddenInput('site', $site);
+    foreach ($areas as $id => $area) {
+	    $button = new ElementA();
+	    $button->setText('View Bookable ' . $area);
+	    $link = 'index.php?';
+	    $vars = array('view' => $view, 'page_date' => $page_date, 'area' => $id);
+	    $link .= http_build_query($vars, '', '&');
+	    $button->setAttributes(array('href' => $link));
+	    if ($current == $id) {
+		    $button->addClass('selected');
+	    }
+	    $out_html .= $button->toHTML();
     }
-
-    $select = new ElementSelect();
-    $select->setAttributes(array('class'      => 'room_area_select',
-                                 'name'       => 'area',
-                                 'disabled'   => is_kiosk_mode(),
-                                 'aria-label' => get_vocab('select_area'),
-                                 'onchange'   => 'this.form.submit()'))
-           ->addSelectOptions($areas, $current, true);
-    $form->addElement($select);
-
-    // Note:  the submit button will not be displayed if JavaScript is enabled
-    $submit = new ElementInputSubmit();
-    $submit->setAttributes(array('class' => 'js_none',
-                                 'value' => get_vocab('change')));
-    $form->addElement($submit);
-
-    $out_html .= $form->toHTML();
   }
 
   return $out_html;
@@ -149,7 +132,7 @@ function make_room_select_html (string $view, int $view_all, int $year, int $mon
     $out_html .= $form->toHTML();
   }
 
-  return $out_html;
+  return ''; //$out_html;
 } // end make_room_select_html
 
 
