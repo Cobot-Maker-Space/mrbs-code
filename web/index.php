@@ -53,7 +53,7 @@ function make_area_select_html(string $view, int $year, int $month, int $day, in
 
     foreach ($areas as $id => $area) {
 	    $button = new ElementA();
-	    $button->setText('View Bookable ' . $area);
+	    $button->setText($area);
 	    $link = 'index.php?';
 	    $vars = array('view' => $view, 'page_date' => $page_date, 'area' => $id);
 	    $link .= http_build_query($vars, '', '&');
