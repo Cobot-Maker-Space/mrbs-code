@@ -729,10 +729,13 @@ if (is_private_event($private) && $writeable)
 {
   echo ' ('.get_vocab("unavailable").')';
 }
+
+if ($area == 1) {
 if ($private) {
   echo ' (Exclusive)';
 } else {
   echo ' (Non-Exclusive)';
+}
 }
 echo "</h3>\n";
 
